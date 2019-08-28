@@ -3,50 +3,16 @@
 const API_URL = 'https://raw.githubusercontent.com/GeekBrainsTutorial/online-store-api/master/responses';
 // end Глобальные сущности
 
-
-// function makeGETRequest(url, callback) {
-
-//     let xhr;
-  
-//     if (window.XMLHttpRequest) {
-//       xhr = new XMLHttpRequest();
-//     } else if (window.ActiveXObject) { 
-//       xhr = new ActiveXObject("Microsoft.XMLHTTP");
-//     }
-
-//     xhr.open('GET', url, true);
-//     xhr.send();
-
-    
-  
-//     xhr.onreadystatechange = function () {
-//       if (xhr.readyState === 4) {
-//         callback(xhr.response);
-//       }
-//     }
-// }
-
 function makeGETRequest(url) {
-    let xhr;
-  
-    if (window.XMLHttpRequest) {
-      xhr = new XMLHttpRequest();
-    } else if (window.ActiveXObject) { 
-      xhr = new ActiveXObject("Microsoft.XMLHTTP");
-    }
-    xhr.open('GET', url, true);
-    xhr.send();
-
     return new Promise ((resolve, reject) => {
-        if (xhr.readyState === 4) {
-            resolve(xhr.responseText);
-        } else {
-            reject(new Error(`Error!: ${xhr.status}; State: ${xhr.readyState}`));
-        }
+        const xhr = new XMLHttpRequest();
+        
+        xhr.open('GET', url, true);
+        xhr.onload = () => resolve(xhr.responseText);
+        xhr.onerror = () => reject(xhr.statusText);
+        xhr.send();
     })
 }
-
-
 
 class GoodsItem {
     constructor(title, price) {
@@ -68,18 +34,15 @@ class GoodsList {
         this.goods = [];
     }
 
-    fetchGoods(cb) {
+    fetchGoods() {
         makeGETRequest (`${API_URL}/catalogData.json`)
-            .then(
-                goods => {this.goods = JSON.parse(goods)},
-                error => console.log(error)
-                )
-            .then(cb);
+            .then(goods => JSON.parse(goods))
+            .then(goods => this.render(goods));
     }
 
-    render() {
+    render(goods) {
         let listHtml = '';
-        this.goods.forEach(good => {
+        goods.forEach(good => {
             const goodItem = new GoodsItem(good.product_name, good.price);
             listHtml += goodItem.render();
         } );
@@ -97,9 +60,7 @@ class GoodsList {
 
 const list = new GoodsList();
 
-list.fetchGoods(() => {
-    list.render();
-}) ;
+list.fetchGoods();
 
 
 
