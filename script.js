@@ -1,7 +1,7 @@
 'use strict'
-// ==== Глобальные сущности
+   // ==== Глобальные сущности
 const API_URL = 'https://raw.githubusercontent.com/GeekBrainsTutorial/online-store-api/master/responses';
-// end Глобальные сущности
+   // end Глобальные сущности
 
 function makeGETRequest(url) {
     return new Promise ((resolve, reject) => {
