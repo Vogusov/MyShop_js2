@@ -1,14 +1,7 @@
 'use strict'
-<<<<<<< Updated upstream
 // ==== Глобальные сущности
 const API_URL = 'https://raw.githubusercontent.com/GeekBrainsTutorial/online-store-api/master/responses';
 // end Глобальные сущности
-=======
-   // ==== Глобальные сущности
-const API_URL = 'https://raw.githubusercontent.com/Vogusov/store_API/master';
-// https:raw.githubusercontent.com/GeekBrainsTutorial/online-store-api/master/responses
-   // end Глобальные сущности
->>>>>>> Stashed changes
 
 function makeGETRequest(url) {
     return new Promise ((resolve, reject) => {
@@ -46,7 +39,7 @@ class GoodsItem {
                     <p>${this.price + ' $'}</p>
                     <button class="product-button" type="button">Buy</button>
                 </div>`;
-    }
+    } 
 }
 
 class GoodsList {
