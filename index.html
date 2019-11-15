@@ -5,13 +5,18 @@
     <title>Интернет-магазин</title>
    <link rel="stylesheet" href="style.css">
    <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">  -->
-   <script defer src="script.js"></script>
+   
 </head>
 <body>
    <header class="header">
+      <div class="search-block">
+            <input type="text" class="goods-search">
+            <button class="search-button" type="button">Искать</button>
+      </div>
+      
        <button id="cart-button" class="cart-button" type="button">Cart</button>
        <div class="cart">
-            <div class='cart-item'>
+            <!-- <div class='cart-item'>
                <img src=https://place-hold.it/100x100 class='cart-item-img' >
                <div class="cart-item-content">
                   <h4> ${this.title}</h4>
@@ -29,7 +34,7 @@
                 <p>Цена: ${this.price}</p>
                 <p>Колличество: ${this.qnt}</p>
                 <p>Сумма: ${this.price * this.qnt}</p>
-             </div>
+             </div> -->
             
         </div>
    
@@ -48,6 +53,6 @@
    </main>
     
     
-    
+   <script defer src="script.js"></script>
 </body>
 </html>

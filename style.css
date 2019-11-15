@@ -14,7 +14,7 @@ body{
     padding: 10px;
     background-color: #F9E3D5;
     display: flex;
-    justify-content: flex-end;   
+    justify-content: space-around;   
 
 }
 
@@ -35,6 +35,8 @@ body{
     cursor: pointer;
     outline: none;
 } 
+
+
 
 .goods-item {
     /* width: 150px;
