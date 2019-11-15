@@ -1,19 +1,11 @@
 'use strict'
-<<<<<<< Updated upstream
 // ==== Глобальные сущности
 const API_URL = 'https://raw.githubusercontent.com/GeekBrainsTutorial/online-store-api/master/responses';
 // end Глобальные сущности
-=======
-   // ==== Глобальные сущности
-const API_URL = 'https://raw.githubusercontent.com/Vogusov/store_API/master';
-// https:raw.githubusercontent.com/GeekBrainsTutorial/online-store-api/master/responses
-   // end Глобальные сущности
->>>>>>> Stashed changes
 
 function makeGETRequest(url) {
     return new Promise ((resolve, reject) => {
         const xhr = new XMLHttpRequest();
-        
         xhr.open('GET', url, true);
         xhr.onload = () => {
             console.log('Состояние запроса: ' + xhr.readyState);
