@@ -1,6 +1,6 @@
 'use strict'
 // ==== Глобальные сущности
-const API_URL = 'https://raw.githubusercontent.com/GeekBrainsTutorial/online-store-api/master/responses';
+const API_URL = 'https://raw.githubusercontent.com/Vogusov/store_API/master';
 // end Глобальные сущности
 
 function makeGETRequest(url) {
@@ -65,7 +65,7 @@ class GoodsList {
             const goodItem = new GoodsItem(good.product_name, good.price);
             listHtml += goodItem.render();
         } );
-        document.querySelector('.goods-search').innerHTML = listHtml;
+        document.querySelector('.goods-list').innerHTML = listHtml;
     }
 
     findTotalCost() {
