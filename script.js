@@ -53,8 +53,9 @@ class GoodsList {
             .then((goods) => {
                 this.goods = JSON.parse(goods);
                 this.filteredGoods = JSON.parse(goods);
+                // this.render();
             })
-            // .then(goods => this.render(goods))
+            .then(() => this.render())
             .catch(error => {
                 console.log(error)
             })
@@ -98,7 +99,7 @@ searchButton.addEventListener('click', () => {
 const list = new GoodsList();
 
 list.fetchGoods();
-list.render();
+
 
 // /#[a-f0-9]{6}\b/gi
 
