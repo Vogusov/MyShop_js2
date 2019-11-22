@@ -1,104 +1,186 @@
 'use strict'
-// ==== Глобальные сущности
+
 const API_URL = 'https://raw.githubusercontent.com/Vogusov/store_API/master';
-// end Глобальные сущности
+const image = 'https://place-hold.it/150x200';
+const cartImage = 'https://place-hold.it/100x100';
 
-function makeGETRequest(url) {
-    return new Promise ((resolve, reject) => {
-        const xhr = new XMLHttpRequest();
-        
-        xhr.open('GET', url, true);
-        xhr.onload = () => {
-            console.log('Состояние запроса: ' + xhr.readyState);
-            console.log('Статус запроса: ' + xhr.status);
-            resolve(xhr.responseText);
-            console.log('Тело ответа сервера: ' + xhr.response);
-            console.log('Текст ответа: ' + xhr.responseText);           
-        };
-        xhr.onerror = () => {
-            console.log('Состояние запроса: ' + xhr.readyState);
-            console.log('Статус запроса: ' + xhr.status);
-            reject(xhr.statusText);
-            console.log('Тело ответа сервера: ' + xhr.response);
-            console.log('Текст ответа: ' + xhr.responseText);
-        
-        };
-        xhr.send();
-    })
-}
+const userCart = []; 
 
-class GoodsItem {
-    constructor(title, price) {
-        this.product_name = title;
-        this.price = price;
-    }
-    render() {
-        return `<div class='goods-item'>
-                    <img src=https://place-hold.it/150x200 title='product picture'>
-                    <h3> ${this.product_name}</h3>
-                    <p>${this.price + ' $'}</p>
-                    <button class="product-button" type="button">Buy</button>
-                </div>`;
-    } 
-}
-
-class GoodsList {
-    constructor() {
+class List {
+    constructor(url, container) {
+        this.container = container;
+        this.url = url;
         this.goods = [];
+        this.allProducts = [];
         this.filteredGoods = [];
+        this._init ()
     }
 
-    fetchGoods() {
-        makeGETRequest (`${API_URL}/catalog.json`)
-            .then((goods) => {
-                this.goods = JSON.parse(goods);
-                this.filteredGoods = JSON.parse(goods);
-                // this.render();
-            })
-            .then(() => this.render())
-            .catch(error => {
+    getJSON (url) {
+        return fetch (url ? url : `${API_URL + this.url}`)
+            .then (resolve => resolve.json())
+            .catch (error => {
                 console.log(error)
             })
-        } 
-
-    render() {
-        let listHtml = '';
-        this.filteredGoods.forEach(good => {
-            const goodItem = new GoodsItem(good.product_name, good.price);
-            listHtml += goodItem.render();
-        } );
-        document.querySelector('.goods-list').innerHTML = listHtml;
     }
 
-    findTotalCost() {
-        let totalCost = 0;
-        this.goods.forEach(good => {
-            totalCost += this.price;
-            return totalCost;
-        });
-    }
+    handleData (data) {
+		this.goods = [...data]
+		this.render ()
+	}
 
-    filterGoods(value) {
-        const regexp = new RegExp(value, 'i');
-        this.filteredGoods = this.goods.filter(good => regexp.test(good.product_name));
-        this.render();
-    }
+    render () {
+		const block = document.querySelector(this.container)
+
+		for (let product of this.goods) {
+			const prod = new lists [this.constructor.name] (product)
+			this.allProducts.push (prod)
+			block.insertAdjacentHTML('beforeend', prod.render ())
+		}
+	}
 };
 
 
+class Item {
+	constructor (el, img = image) {
+		this.product_name = el.product_name;
+		this.id_product = el.id_product;
+		this.price = el.price;
+		this.img = img
+	}
+	render () {
+		return `<div class="goods-item" data-id="${this.id_product}">
+                        <img src="${this.img}" alt="product picture" title='product picture'>
+                        <h3> ${this.product_name}</h3>
+                        <p>${this.price + ' $'}</p>
+                        <button class="buy-button"
+                            data-id="${this.id_product}"
+                            data-name="${this.title}"
+                            data-image="${this.img}"
+                            data-price="${this.price}"
+                            type="button">
+                            Buy
+                        </button>`
+        }
+}
 
-let searchButton = document.querySelector('.search-button');
-let searchInput = document.querySelector('.goods-search');
+class ProductItem extends Item {};
 
-searchButton.addEventListener('click', () => {
-    const value = searchInput.value;
-    list.filterGoods(value);
-}) ;
+class CartItem extends Item {
+	constructor (el, img = 'https://placehold.it/100x80') {
+		super (el, img)
+		this.quantity = el.quantity
+	}
+	render () {
+        return `<div class='cart-item' data-id="${this.id_product}">
+                    <img src='${this.img}' class='cart-item-img' >
+                    <div class="cart-item-content">
+                        <h4 class="product-title"> ${this.product_name}</h4>
+                        <p class="product-single-price">Цена: ${this.price}</p>
+                        <p class="product-quantity">Колличество: ${this.qnt}</p>
+                        <p class="product-price">Сумма: ${this.price * this.qnt}</p>
+                        <button class="del-button" data-id="${this.id_product}">&times;</button>
+                    </div>
+                </div>`
+	}
+}
+
+class ProductsList extends List {
+	constructor (cart, url = '/catalog.json', container = '.goods-list') {
+		super (url, container);
+		this.cart = cart;
+		this.getJSON()
+			.then (data => this.handleData(data))
+	}
+	_init () {
+		document.querySelector(this.container).addEventListener('click', evt => {
+			if (evt.target.classList.contains('buy-button')) {
+				evt.preventDefault()
+				this.cart.addProduct (evt.target)
+			}
+		})
+	}
+}
 
 
-const list = new GoodsList();
+// проверить карзину  доделать jsonы!!!!!!!
+class Cart extends List {
+	constructor (url = '/getBasket.json', container = '.cart') {
+		super (url, container);
+		this.getJSON()
+			.then (data => this.handleData(data.contents))
+	}
+	addProduct (element) {
+		this.getJSON (`${API}/addToBasket.json`)
+			.then (data => {
+				if (data.result) {
+					let productId = +element.dataset['id'];
+					let find = this.allProducts.find (product => product.id_product === productId)
 
-list.fetchGoods();
+					if (!find) {
+						let product = {
+							product_name: element.dataset['name'],
+							id_product: productId,
+							price: +element.dataset['price'],
+							quantity: 1
+						}
+						this.goods = [product];
+                        this.render()
+					} else {
+						find.quantity++
+						this._updateCart(find)
+					}
+				} else {
+					debugger
+					console.log ('err')
+				}
+			})
+	}
+	removeProduct (element) {
+		this.getJSON (`${API}/deleteFromBasket.json`)
+			.then (data => {
+				if (data.result) {
+					let productId = +element.dataset['id'];
+					let find = this.allProducts.find (product => product.id_product === productId)
+
+					if (find.quantity > 1) {
+						find.quantity--
+						this._updateCart(find)
+					} else {
+						this.allProducts.splice (this.allProducts.indexOf(find), 1)
+						document.querySelector (`.cart-item[data-id="${productId}"]`).remove ()
+					}
+				} else {
+					console.log ('err')
+				}
+			})
+	}
+	_updateCart (product) {
+		let block = document.querySelector(`.cart-item[data-id="${product.id_product}"]`)
+		block.querySelector('.product-quantity').textContent = `Quantity: ${product.quantity}`
+		block.querySelector('.product-price').textContent = `${product.quantity} * ${product.price}`
+	}
+	_init () {
+		document.querySelector(this.container).addEventListener('click', evt => {
+			if (evt.target.classList.contains('del-button')) {
+				this.removeProduct (evt.target)
+			}
+		})
+	}
+}
+
+let lists = {
+	ProductsList: ProductItem,
+	Cart: CartItem
+}
+
+let cart = new Cart ();
+let products = new ProductsList (cart)
+
+document.querySelector ('.cart-button').addEventListener ('click', () => {
+	document.querySelector ('.cart').classList.toggle ('invisible')
+})
+
 
 
 // /#[a-f0-9]{6}\b/gi

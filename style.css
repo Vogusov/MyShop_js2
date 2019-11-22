@@ -1,7 +1,8 @@
 
 * {
     margin: 0;
-    padding: 0
+    padding: 0;
+    box-sizing: border-box;
 }
 
 body{
@@ -74,7 +75,7 @@ body{
     margin: 10px;
 }
 
-.product-button {
+.buy-button {
     width:100px;
     padding: 5px;
     text-transform: uppercase;
