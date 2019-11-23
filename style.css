@@ -28,7 +28,7 @@ body{
     background-color: #778196;
     /*content: "\f290";
     font-family: FontAwesome;
-    */:;
+    */
     -webkit-border-radius: 8px;
     -moz-border-radius: 8px;
     -ms-border-radius: 8px;
@@ -113,6 +113,10 @@ body{
     top: 60px;
     left: 75%;
     /* display: none; */
+}
+
+.invisible{
+    display: none;
 }
 
 .cart-item {
