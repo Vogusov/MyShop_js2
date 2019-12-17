@@ -157,8 +157,8 @@ class Cart extends List {
 	}
 	_updateCart(product) {
 		let block = document.querySelector(`.cart-item[data-id="${product.id_product}"]`)
-		block.querySelector('.product-quantity').textContent = `Сумма: ${product.quantity}`
-		block.querySelector('.product-price').textContent = `${product.quantity} * ${product.price}`
+		block.querySelector('.product-quantity').textContent = `Колличество: ${product.quantity}`
+		block.querySelector('.product-price').textContent = `Сумма: ${product.quantity * product.price}`
 	}
 	_init() {
 		document.querySelector(this.container).addEventListener('click', evt => {
@@ -183,46 +183,4 @@ document.querySelector('.cart-button').addEventListener('click', () => {
 
 
 
-// /#[a-f0-9]{6}\b/gi
-
-
-
-
-//-----класс элемента корзины
-// class CartItem extends GoodsItem {
-//     constructor(qnt) {
-//         this.qnt = qnt;
-//     }
-//     render() {
-//         return `<div class='cart-item'>
-//                     <img src=https://place-hold.it/100x100 >
-//                     <h4> ${this.product_name}</h4>
-//                     <p>Цена: ${this.price}</p>
-//                     <p>Колличество: ${this.qnt}</p>
-//                     <p>Сумма: ${this.price * this.qnt}</p>
-//                 </div>`
-//     }
-//     addItem() {qnt++};
-//     deleteItem() {qnt--};
-// }
-
-
-
-
-//----------класс корзины
-// class CartList {
-//     constructor() {
-//         this.cartItems = [];
-//     }
-//     getCartItems() {   
-//         // список добавленных в карзину товаров
-//     }
-//     render() {
-//         let listHtml = '';
-//         this.goods.forEach(good => {
-//             const cartItem = new CartItem(good.title, good.price, good.qnt);
-//             listHtml += cartItem.render();
-//         } );
-//         document.querySelector('.cart').innerHTML = listHtml;
-//     }
-// }
+ 
