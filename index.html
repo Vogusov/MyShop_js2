@@ -10,22 +10,35 @@
 </head>
 
 <body>
+   <div id="app">
+      <header class="header">
+         <div class="search-block">
+            <input type="text" class="goods-search">
+            <button class="search-button" type="button">Искать</button>
+         </div>
+         <button id="cart-button" class="cart-button" type="button">Cart</button>
+         <div class="cart invisible"></div>
+      </header>
 
-   <header class="header">
-      <div class="search-block">
-         <input type="text" class="goods-search">
-         <button class="search-button" type="button">Искать</button>
-      </div>
-      <button id="cart-button" class="cart-button" type="button">Cart</button>
-      <div class="cart invisible"></div>
-   </header>
+      <main>
+         <div class="goods-list">
+            <div class="goods-item" v-for="product of products" :key="product.id_product">
+               <img :src="image" alt="product picture" title='product picture'>
+               <h3> {{ product.product_name }}</h3>
+               <p>{{ product.price }}</p>
+               <button class="buy-button" @click="addProduct (product)" type="button">
+                  Buy
+               </button>
+            </div>
+         </div>  
+      </main>
+   </div>
 
-   <main>
-      <div class="goods-list"></div>
-   </main>
+
 
 
    <script defer src="script.js"></script>
+   <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 </body>
 
 </html>
